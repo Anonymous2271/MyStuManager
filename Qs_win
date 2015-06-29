@@ -1,0 +1,90 @@
+package cn.itcast;
+
+import java.awt.BorderLayout;
+import java.awt.GridLayout;
+import java.awt.Panel;
+import java.awt.TextField;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.JComboBox;
+import javax.swing.JFrame;
+
+public class Qs_win implements ActionListener{
+	public static Qs_win qs_win = new Qs_win();
+	
+	public JFrame q_frame = new JFrame("查询结果显示"); //查询结果显示界面
+
+	public Panel panel1 = new Panel();
+	public Panel panel2 = new Panel();
+	public Panel panel3 = new Panel();
+	
+	public String[] xuanx_stu = {"学号","姓名","性别","班级编号","院系","生日","籍贯"};
+	//public String[] xuanx_cha = {"记录号","学号","变更代码","记录时间","描述"};
+	
+	//public String[] xuany = {"个人信息表","学籍变更表","奖励情况表","处罚情况表","院系信息表","班级信息表","学籍变动代码表","奖励等级代码表","处罚等级代码表"};
+	public JComboBox xx = new JComboBox(xuanx_stu);
+	//public JComboBox yy = new JComboBox(xuany);
+	
+	public TextField q = new TextField();//查询输入框
+	public String single = "STUDENTID";
+	//public String table = "student";
+
+	 
+	private Qs_win(){
+		xx.addActionListener(this);
+		//yy.addActionListener(this);
+	
+		panel1.setLayout(new BorderLayout(2,1));
+		panel2.setLayout(new GridLayout(0,3,0,3));
+		panel3.setLayout(new GridLayout(2,0,0,3));
+		
+		panel1.add(q,BorderLayout.CENTER);
+		panel1.add(xx,BorderLayout.EAST);
+		panel2.add(Butt.q_save);
+		panel2.add(Butt.delete);
+		panel2.add(Butt.update);
+		
+		panel3.add(panel1);
+		panel3.add(panel2);
+		
+		q_frame.setSize(500,240);
+		q_frame.setLocationRelativeTo(null);
+		q_frame.setLocation(700,100);
+	}
+	
+	@Override
+	public void actionPerformed(ActionEvent e) {  //主界面下拉菜单事件
+		if(e.getSource()== xx){
+			int inx = xx.getSelectedIndex();
+			switch(inx){
+			case 0:single = "STUDENTID";break;
+			case 1:single = "NAME";break;
+			case 2:single = "SEX";break;
+			case 3:single = "CLASS";break;
+			case 4:single = "DEPARTMENT";break;
+			case 5:single = "BIRTHDAY";break;
+			case 6:single = "NATIVE_PLACE";break;
+			default:;break;
+			}
+		}
+		/*if(e.getSource()== yy){
+			int iny = yy.getSelectedIndex();
+			switch (iny) {
+			case 0:table = "student";break;
+			case 1:table = "schange";break;
+			case 2:table = "reward";break;
+			case 3:table = "punishment";break;
+			case 4:table = "department";break;
+			case 5:table = "class";break;
+			case 6:table = "change_code";break;
+			case 7:table = "reward_levels";break;
+			case 8:table = "punishment_levels";break;
+			default:;break;
+			}
+		}*/
+		
+	}
+	
+
+}
