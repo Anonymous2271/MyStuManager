@@ -1,0 +1,52 @@
+package cn.itcast;
+
+import java.awt.BorderLayout;
+import java.awt.FlowLayout;
+import java.awt.GridLayout;
+import java.awt.Panel;
+import java.awt.Point;
+
+import javax.swing.JFrame;
+
+
+public class Window extends JFrame{
+	
+	static Window win = new Window();
+	
+	private Panel panel1 = new Panel();
+	private Panel panel2 = new Panel();
+	private Panel panel3 = new Panel();
+	
+	private Window(){
+		this.setTitle("学生信息管理系统");
+	    this.setSize(800,380);
+	    this.setLocation(300, 300);
+	    this.setLocationRelativeTo(null);
+	    this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	    
+	    panel1.setLayout(new GridLayout(2,2,0,0));
+	    panel2.setLayout(new GridLayout(1,1,0,0));
+		panel1.add(Butt.stu);
+		panel1.add(Butt.change);
+		panel1.add(Butt.reward);
+		panel1.add(Butt.punishment);
+		panel2.add(Qs_win.qs_win.panel3);
+	
+		panel3.setLayout(new BorderLayout(2,2));
+		panel3.add(panel1,BorderLayout.CENTER);
+		panel3.add(panel2,BorderLayout.SOUTH);
+		panel3.setBounds(0, 0, 280, 350);
+		
+		View.test.setBounds(282, 0, 510, 350);
+		
+		this.setLayout(null);
+		this.add(panel3);
+		this.add(View.test);
+		this.setVisible(true);
+	}
+	
+	public static void main(String []args){
+		
+	}
+
+}
