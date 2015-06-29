@@ -1,0 +1,45 @@
+package cn.itcast;
+
+import java.awt.GridLayout;
+import java.awt.Panel;
+import java.awt.TextArea;
+import java.awt.TextField;
+
+import javax.swing.JFrame;
+
+public class Reward_win extends JFrame{ //奖励输入界面
+	public static Reward_win reward_win = new Reward_win(); 
+
+	public Panel panel = new Panel();
+	public Panel viewpanel = new Panel();
+	
+	public TextField id = new TextField("记录号：");
+	public TextField sid = new TextField("学号：");
+	public TextField levels = new TextField("级别代码：");
+	public TextField rec_time = new TextField("记录时间：");
+	public TextField description = new TextField("奖励描述：");
+	
+	public TextArea v = new TextArea();
+
+	private Reward_win(){
+        panel.setLayout(new GridLayout(6,1,0,2));
+		panel.add(id);
+		panel.add(sid);
+		panel.add(levels);
+		panel.add(rec_time);
+		panel.add(description);
+		panel.add(Butt.r_save);
+		
+		viewpanel.setLayout(new GridLayout(1,1));
+		viewpanel.add(v);
+		
+		this.setTitle("学生奖励情况输入");
+		this.setSize(420,300);
+		this.setLocation(1330,335);
+		this.setLayout(new GridLayout(1,2));
+		this.add(viewpanel);
+		this.add(panel);
+		
+	}
+
+}
