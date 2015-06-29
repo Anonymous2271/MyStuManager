@@ -1,0 +1,47 @@
+package cn.itcast;
+
+import java.awt.GridLayout;
+import java.awt.Panel;
+import java.awt.TextArea;
+import java.awt.TextField;
+
+import javax.swing.JFrame;
+
+public class Change_win extends JFrame{ //学籍变更输入界面
+
+	public static Change_win change_win = new Change_win();
+	
+	public Panel panel = new Panel();
+	public Panel viewpanel = new Panel();
+	
+	public TextField id = new TextField("记录号：");
+	public TextField sid = new TextField("学号：");
+	public TextField change = new TextField("变更代码：");
+	public TextField rec_time = new TextField("记录时间：");
+	public TextField description = new TextField("变更描述：");
+	
+	public TextArea v = new TextArea();
+	
+
+	private Change_win(){
+		this.setTitle("学生学籍变更情况输入");
+		this.setSize(420,300);
+		this.setLocation(370,335);
+		
+		panel.setLayout(new GridLayout(6,1,0,2));
+		panel.add(id);
+		panel.add(sid);
+		panel.add(change);
+		panel.add(rec_time);
+		panel.add(description);
+		panel.add(Butt.c_save);
+		viewpanel.setLayout(new GridLayout(1,1));
+		viewpanel.add(v);
+		
+		this.setLayout(new GridLayout(1,2));
+		this.add(viewpanel);
+		this.add(panel);
+		
+	}
+
+}
