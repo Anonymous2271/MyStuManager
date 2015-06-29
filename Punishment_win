@@ -1,0 +1,47 @@
+package cn.itcast;
+
+import java.awt.GridLayout;
+import java.awt.Panel;
+import java.awt.TextArea;
+import java.awt.TextField;
+
+import javax.swing.JFrame;
+
+public class Punishment_win extends JFrame{ //处罚输入界面
+	public static Punishment_win punishment_win = new Punishment_win();
+
+	public Panel panel = new Panel();
+	public Panel viewpanel = new Panel();
+	
+	public TextField id = new TextField("记录号：");
+	public TextField sid = new TextField("学号：");
+	public TextField levels = new TextField("级别代码：");
+	public TextField rec_time = new TextField("记录时间：");
+	public TextField enable = new TextField("是否生效(T,F)：");
+	public TextField description = new TextField("处罚描述：");
+	
+	public TextArea v = new TextArea();
+
+	 
+	private Punishment_win(){
+		panel.setLayout(new GridLayout(7,1,0,2));
+		panel.add(id);
+		panel.add(sid);
+		panel.add(levels);
+		panel.add(rec_time);
+		panel.add(enable);
+		panel.add(description);
+		panel.add(Butt.p_save);
+		
+		viewpanel.setLayout(new GridLayout(1,1));
+		viewpanel.add(v);
+		
+		this.setTitle("学生处罚情况输入");
+		this.setSize(420,350);
+		this.setLocation(1110,335);
+		this.setLayout(new GridLayout(1,2));
+		this.add(viewpanel);
+		this.add(panel);
+	}
+
+}
