@@ -1,0 +1,52 @@
+package cn.itcast;
+
+import java.awt.GridLayout;
+import java.awt.Panel;
+import java.awt.TextArea;
+import java.awt.TextField;
+
+import javax.swing.JFrame;
+
+public class Stu_win extends JFrame{ //个人信息输入界面
+	public static Stu_win stu_win = new Stu_win();
+	
+	public Panel panel = new Panel();
+	public Panel viewpanel = new Panel();
+	
+	public TextField sid = new TextField("学号：");
+	public TextField name = new TextField("姓名：");
+	public TextField sex = new TextField("性别(M,F)：");
+	public TextField sclass = new TextField("班级编号：");
+	public TextField department = new TextField("所属院系编号：");
+	public TextField birthday = new TextField("生日：");
+	public TextField native_place = new TextField("籍贯：");
+	
+	public TextArea v1 = new TextArea();
+	public TextArea v2 = new TextArea();
+	
+	
+	private Stu_win(){
+		panel.setLayout(new GridLayout(8,1,0,2));
+		panel.add(sid);
+		panel.add(name);
+		panel.add(sex);
+		panel.add(sclass);
+		panel.add(department);
+		panel.add(birthday);
+		panel.add(native_place);
+		panel.add(Butt.s_save);
+		
+		viewpanel.setLayout(new GridLayout(2, 1, 5, 5));
+		viewpanel.add(v1);
+		viewpanel.add(v2);
+		
+		this.setTitle("学生个人信息输入");
+		this.setLayout(new GridLayout(1,2));
+		this.add(viewpanel);
+		this.add(panel);
+		this.setSize(420,400);
+		this.setLocation(590,335);
+
+	}
+
+}
