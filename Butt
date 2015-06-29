@@ -1,0 +1,412 @@
+package cn.itcast;
+
+
+import java.awt.Point;
+import java.awt.TextArea;
+import java.awt.TextField;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.sql.Statement;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+
+import java.sql.PreparedStatement;
+
+/*
+ * 后台（数据库操作）
+ */
+public class Butt extends JButton{ 
+	
+	static ImageIcon i1 = new ImageIcon("E:/OneDrive/workplace/STU_M/Icon/1.jpg");
+	static ImageIcon i2 = new ImageIcon("E:/OneDrive/workplace/STU_M/Icon/2.jpg");
+	static ImageIcon i3 = new ImageIcon("E:/OneDrive/workplace/STU_M/Icon/3.jpg");
+	static ImageIcon i4 = new ImageIcon("E:/OneDrive/workplace/STU_M/Icon/4.jpg");
+	
+	public static Butt stu = new Butt(i1);
+	public static Butt change = new Butt(i2);
+	public static Butt reward = new Butt(i3);
+	public static Butt punishment = new Butt(i4);
+
+	public static Butt s_save = new Butt("保存");
+	public static Butt c_save = new Butt("保存");
+	public static Butt p_save = new Butt("保存");
+	public static Butt r_save = new Butt("保存");
+	public static Butt q_save = new Butt("查询");
+	
+	public static Butt delete = new Butt("删除");
+	public static Butt update = new Butt("更改");
+	
+	//127.0.0.1:3306
+	public static final String DBDRIVER = "com.mysql.jdbc.Driver";  
+    public static final String DBURL = "jdbc:mysql://localhost:3306/stu_course";  
+    public static final String DBUSER = "root";  
+    public static final String DBPASS = "root";
+	
+	private Butt(String a){
+		super(a);
+		Qw qw = new Qw();
+		this.addActionListener(qw);
+	}		
+	private Butt(ImageIcon a){
+		super(a);
+		Qw qw = new Qw();
+		this.addActionListener(qw);
+	}
+	
+	
+	/*
+	 * 主界面的四个按钮事件
+	 */
+	public class Qw implements ActionListener{  
+		public void actionPerformed(ActionEvent e) {
+			// TODO Auto-generated method stub
+			
+			if(e.getSource().equals(stu)){    //点击个人信息输入
+				Stu_win.stu_win.setVisible(true);                        
+				try {//显示班级表
+					Class.forName(DBDRIVER);
+					Connection con1 = null; 
+			        con1 = DriverManager.getConnection(DBURL,DBUSER,DBPASS);
+			        String a0 = "编号"+"\t"+"全称"+"\t"+"所属院系编号"+"\n";
+			        String a1; 
+		        	String a2;
+		        	String a3;	      
+		        	String aa = "";	
+		        	Statement state1 = con1.createStatement();
+		        	ResultSet res_v_c = state1.executeQuery("select * from class;");
+		        	while(res_v_c.next()){
+		        		a1 = res_v_c.getString("ID");
+		        		a2 = res_v_c.getString("NAME");
+		        		a3 = res_v_c.getString("DID");
+		        		aa = aa+ a1 + "\t" + a2 + "\t" + a3 + "\n";
+		        	}
+		            Stu_win.stu_win.v1.setText(a0+aa);
+		        
+		        	//显示院系表
+		            Connection con2 = null; 
+			        con2 = DriverManager.getConnection(DBURL,DBUSER,DBPASS);
+			        String b0 = "编号"+"\t"+"全称"+"\t"+"所属院系编号"+"\n";
+			        String b1; 
+		        	String b2;	      
+		        	String bb = "";	
+		        	Statement state2 = con2.createStatement();
+		        	ResultSet res_v_d = state2.executeQuery("select * from department;");
+		        	while(res_v_d.next()){
+		        		b1 = res_v_d.getString("ID");
+		        		b2 = res_v_d.getString("NAME"); 
+		        		bb = bb+ b1 + "\t" + b2 + "\n";
+		        	}
+		            Stu_win.stu_win.v2.setText(b0+bb);
+		         
+				} catch (Exception e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}	
+			}
+			
+			
+			if(e.getSource().equals(change)){//打学籍变更输入界面
+				Change_win.change_win.setVisible(true);
+				try {
+					Class.forName(DBDRIVER);
+					Connection con3 = null; 
+			        con3 = DriverManager.getConnection(DBURL,DBUSER,DBPASS);
+			        String b0 = "代码"+"\t"+"描述"+"\n";
+			        String b1; 
+		        	String b2;	      
+		        	String bb = "";	
+		        	Statement state3 = con3.createStatement();
+		        	ResultSet res_v_ch = state3.executeQuery("select * from change_code;");
+		        	while(res_v_ch.next()){
+		        		b1 = res_v_ch.getString("CODE");
+		        		b2 = res_v_ch.getString("DESCRIPTION"); 
+		        		bb = bb+ b1 + "\t" + b2 + "\n";
+		        	}
+		        	System.out.print(b0+bb);
+		            Change_win.change_win.v.setText(b0+bb);
+				} catch (Exception e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}	
+			}
+			
+			
+			
+			if(e.getSource().equals(punishment)){
+				Punishment_win.punishment_win.setVisible(true);//打开处罚输入界面
+				try {
+					Class.forName(DBDRIVER);
+					Connection con4 = null; 
+			        con4 = DriverManager.getConnection(DBURL,DBUSER,DBPASS);
+			        String c0 = "代码"+"\t"+"描述"+"\n";
+			        String c1; 
+		        	String c2;	      
+		        	String cc = "";	
+		        	Statement state4 = con4.createStatement();
+		        	ResultSet res_v_ch = state4.executeQuery("select * from punishment_levels;");
+		        	while(res_v_ch.next()){
+		        		c1 = res_v_ch.getString("CODE");
+		        		c2 = res_v_ch.getString("DESCRIPTION"); 
+		        		cc = cc+ c1 + "\t" + c2 + "\n";
+		        	}
+		            Punishment_win.punishment_win.v.setText(c0+cc);
+				} catch (Exception e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}	
+			}
+			
+			
+			
+			if(e.getSource().equals(reward)){
+				Reward_win.reward_win.setVisible(true);//打开奖励输入界面
+				try {
+					Class.forName(DBDRIVER);
+					Connection con5 = null; 
+			        con5 = DriverManager.getConnection(DBURL,DBUSER,DBPASS);
+			        String d0 = "代码"+"\t"+"描述"+"\n";
+			        String d1; 
+		        	String d2;	      
+		        	String dd = "";	
+		        	Statement state5 = con5.createStatement();
+		        	ResultSet res_v_ch = state5.executeQuery("select * from reward_levels;");
+		        	while(res_v_ch.next()){
+		        		d1 = res_v_ch.getString("CODE");
+		        		d2 = res_v_ch.getString("DESCRIPTION"); 
+		        		dd = dd+ d1 + "\t" + d2 + "\n";
+		        	}
+		            Reward_win.reward_win.v.setText(d0+dd);
+				} catch (Exception e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				
+				
+				
+			}		
+			
+			
+			
+			
+			/*
+			 * 数据库操作
+			 * 
+			 */ 			
+			if(e.getSource().equals(s_save)){	//学生信息输入
+				 try {  
+			        Class.forName(DBDRIVER);
+					Connection con = null; //表示数据库的连接对象
+			        con = DriverManager.getConnection(DBURL,DBUSER,DBPASS);
+			        System.out.println("Connection Successful!"); // 如果连接成功
+			                                                            // 控制台输出Connection Successful!
+			        String s1 = Stu_win.stu_win.sid.getText().replace("学号：","");
+			        String s2 = Stu_win.stu_win.name.getText().replace("姓名：","");
+			        String s3 = Stu_win.stu_win.sex.getText().replace("性别(M,F)：","");
+			        String s4 = Stu_win.stu_win.sclass.getText().replace("班级编号：","");
+			        String s5 = Stu_win.stu_win.department.getText().replace("所属院系编号：","");
+			        String s6 = Stu_win.stu_win.birthday.getText().replace("生日：","");
+			        String s7 = Stu_win.stu_win.native_place.getText().replace("籍贯：","");
+			        String s0 = "insert into student values('"+s1+"','"+s2+"','"+s3+"','"+s4+"','"+s5+"','"+s6+"','"+s7+"','"+""+"','"+""+"','"+""+"');";
+					
+			        PreparedStatement statement = con.prepareStatement(s0);
+			        statement.executeUpdate();
+			        System.out.println(s0);//控制台打印sql语句
+			        } catch (Exception e1) {
+			            e1.printStackTrace();
+			        }
+			}
+			
+			if(e.getSource().equals(c_save)){  //学籍变更信息输入
+				try {  
+			        Class.forName(DBDRIVER);
+					Connection con = null; //表示数据库的连接对象
+			        con = DriverManager.getConnection(DBURL,DBUSER,DBPASS);
+			        System.out.println("Connection Successful!"); // 如果连接成功
+			                                                            // 控制台输出Connection Successful!
+			        String s1 = Change_win.change_win.id.getText().replace("记录号：","");
+			        String s2 = Change_win.change_win.sid.getText().replace("学号：","");
+			        String s3 = Change_win.change_win.change.getText().replace("变更代码：","");
+			        String s4 = Change_win.change_win.rec_time.getText().replace("记录时间：","");
+			        String s5 = Change_win.change_win.description.getText().replace("描述：","");
+			        		
+			        String s0 = "insert into schange values('"+s1+"','"+s2+"','"+s3+"','"+s4+"','"+s5+"')";
+			        	
+			        PreparedStatement statement = con.prepareStatement(s0);
+			        statement.executeUpdate();
+			        System.out.println(s0);//控制台打印sql语句
+			        
+			        } catch (Exception e1) {
+			            e1.printStackTrace();
+			        }
+			}
+			
+			if(e.getSource().equals(p_save)){  //处罚记录输入
+				try {  
+			        Class.forName(DBDRIVER);
+					Connection con = null; //表示数据库的连接对象
+			        con = DriverManager.getConnection(DBURL,DBUSER,DBPASS);
+			        System.out.println("Connection Successful!"); // 如果连接成功
+			                                                            // 控制台输出Connection Successful!
+			        String s1 = Punishment_win.punishment_win.id.getText().replace("记录号：","");
+			        String s2 = Punishment_win.punishment_win.sid.getText().replace("学号：","");
+			        String s3 = Punishment_win.punishment_win.levels.getText().replace("级别代码：","");
+			        String s4 = Punishment_win.punishment_win.rec_time.getText().replace("记录时间：","");
+			        String s5 = Punishment_win.punishment_win.enable.getText().replace("是否生效(T,F)：","");
+			        String s6 = Punishment_win.punishment_win.description.getText().replace("描述：","");
+			
+			        String s0 = "insert into punishment values('"+s1+"','"+s2+"','"+s3+"','"+s4+"','"+s5+"','"+s6+"');";
+			        	
+			        PreparedStatement statement = con.prepareStatement(s0);
+			        statement.executeUpdate();
+			        System.out.println(s0);//控制台打印sql语句
+			        } catch (Exception e1) {
+			            e1.printStackTrace();
+			        }
+			}		
+			if(e.getSource().equals(r_save)){  //奖励记录输入
+				try {  
+			        Class.forName(DBDRIVER);
+					Connection con = null; //表示数据库的连接对象
+			        con = DriverManager.getConnection(DBURL,DBUSER,DBPASS);
+			        System.out.println("Connection Successful!"); // 如果连接成功
+			                                                            // 控制台输出Connection Successful!
+			        String s1 = Reward_win.reward_win.id.getText().replace("记录号：","");
+			        String s2 = Reward_win.reward_win.sid.getText().replace("学号：","");
+			        String s3 = Reward_win.reward_win.levels.getText().replace("级别代码：","");
+			        String s4 = Reward_win.reward_win.rec_time.getText().replace("记录时间：","");
+			        String s5 = Reward_win.reward_win.description.getText().replace("描述：","");
+			
+			        String s0 = "insert into reward values('"+s1+"','"+s2+"','"+s3+"','"+s4+"','"+s5+"');";
+			        	
+			        PreparedStatement statement = con.prepareStatement(s0);
+			        statement.executeUpdate();
+			        System.out.println(s0);//控制台打印sql语句
+			        } catch (Exception e1) {
+			            e1.printStackTrace();
+			        }
+			}
+			
+			/*
+			 * 查询框/查询按钮/结果弹窗事件
+			 */
+			if(e.getSource().equals(q_save)){    
+				try {  
+			        Class.forName(DBDRIVER);
+					Connection con = null; //表示数据库的连接对象
+			        con = DriverManager.getConnection(DBURL,DBUSER,DBPASS);
+			        System.out.println("Connection Successful!"); // 如果连接成功
+			                                                            // 控制台输出Connection Successful!
+			        //接受结果字符串
+			        String a0 = "学号"+"\t"+"姓名"+"\t"+"性别"+"\t"+"班级编号"+"\t"+"院系编号"+"\t"+"生日"+"\t"+"\t"+"籍贯"+"\n";
+			        String a1; 
+		        	String a2;
+		        	String a3;
+		        	String a4;
+		        	String a5;
+		        	String a6;
+		        	String a7;
+		        	String aa = "";	
+		        	
+			        TextArea rr = new TextArea();//结果显示文本域
+			        
+			        String s1 ="select *";
+			
+			        String s2 =" from student";  
+			        String s3 = Qs_win.qs_win.single;
+			        String s4 = Qs_win.qs_win.q.getText();
+			    
+			        String s0 = s1+ s2+" where "+s3+"='"+s4+"';";
+			     
+			        System.out.println(s0);//控制台打印sql语句
+			        Statement statement =  con.createStatement();			        
+			        ResultSet rs = statement.executeQuery(s0);
+			       			        
+			        while(rs.next()){			          	
+			        	a1 = rs.getString("STUDENTID");       	
+			        	a2 = rs.getString("NAME");
+			        	a3 = rs.getString("SEX");
+			        	a4 = rs.getString("CLASS");
+			        	a5 = rs.getString("DEPARTMENT");
+			        	a6 = rs.getString("BIRTHDAY");
+			        	a7 = rs.getString("NATIVE_PLACE"); 
+			        	aa = aa+a1+"\t"+a2+"\t"+a3+"\t"+a4+"\t"+"\t"+a5+"\t"+"\t"+a6+"\t"+a7+"\n";		     	
+			        }
+		        	System.out.println(a0+aa);//控制台打印查询结果
+			        rr.setText(a0+aa);
+			        Qs_win.qs_win.q_frame.add(rr);
+			        Qs_win.qs_win.q_frame.setVisible(true);//显示查询结果窗口
+			          	        
+			        }catch (Exception e1) {
+			            e1.printStackTrace();
+			        }
+			}
+			
+			if(e.getSource().equals(delete)){
+				int row = View.test.tabDemo.getSelectedRow();
+				Object as =  View.test.tabDemo.getModel().getValueAt(row, 0);
+				
+				String s_del = "delete from student where STUDENTID="+as.toString()+";";
+				System.out.println(s_del);	
+			
+				try {
+					Class.forName(DBDRIVER);
+					Connection con = null; //表示数据库的连接对象
+			        con = DriverManager.getConnection(DBURL,DBUSER,DBPASS);
+			        System.out.println("Connection Successful!"); // 如果连接成功	                   
+			                                                               // 控制台输出Connection Successful!
+			        PreparedStatement statement = con.prepareStatement(s_del);
+			        statement.executeUpdate();
+				} catch (Exception e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}	
+			}
+			
+			
+			if(e.getSource().equals(update)){
+				int row = View.test.tabDemo.getSelectedRow();
+				int col = View.test.tabDemo.getSelectedColumn();
+				System.out.println(row);
+				System.out.println(col);
+				Object as =  View.test.tabDemo.getModel().getValueAt(row, col);
+				Object as_id =  View.test.tabDemo.getModel().getValueAt(row, 0);
+				
+				
+				String col_n = null;
+				switch (col) {
+				case 0:col_n = "STUDENTID";break;
+				case 1:col_n = "NAME";break;
+				case 2:col_n = "SEX";break;
+				case 3:col_n = "BIRTHDAY";break;
+				case 4:col_n = "NATIVE_PLACE";break;
+				case 5:col_n = "REWARD";break;
+				case 6:col_n = "PUNISHMENT";break;
+				case 7:col_n = "SCHANGE";break;			
+				}
+				
+				String asd = "update student set "+col_n+" = '"+as.toString()+"' where STUDENTID="+as_id.toString();
+				System.out.println(asd);	
+				
+				try {
+					Class.forName(DBDRIVER);
+					Connection con = null; //表示数据库的连接对象
+			        con = DriverManager.getConnection(DBURL,DBUSER,DBPASS);
+			        System.out.println("Connection Successful!"); // 如果连接成功	                   
+			                                                               // 控制台输出Connection Successful!
+			        PreparedStatement statement = con.prepareStatement(asd);
+			        statement.executeUpdate();
+				} catch (Exception e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}	
+				
+			}
+			
+		}
+	}
+}
