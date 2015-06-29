@@ -1,0 +1,221 @@
+package cn.itcast;
+
+import java.awt.BorderLayout;
+import java.awt.GridLayout;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+
+import javax.swing.JComboBox;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.table.JTableHeader;
+
+
+public class View extends JPanel implements ItemListener {
+	
+   
+	public static View test = new View();
+	
+	public static final String DBDRIVER = "com.mysql.jdbc.Driver";  
+    public static final String DBURL = "jdbc:mysql://localhost:3306/stu_course";  
+    public static final String DBUSER = "root";  
+    public static final String DBPASS = "root";
+    
+	
+	JComboBox<String> com1 = new JComboBox<String>();//院系选择菜单
+	JComboBox<String> com2 = new JComboBox<String>();//班级选择菜单
+	JPanel panel1 = new JPanel();
+	//JPanel panel2 = new JPanel();
+	/*
+	 * 
+	 */
+	 public JScrollPane scpDemo;
+	 public JTableHeader jth;
+	 public JTable tabDemo;
+	 
+	 //public int row;
+	 //public int column;
+	 /*
+	  * 
+	  */
+
+
+	Connection conn = null;
+	private View(){
+		try {
+			Class.forName(DBDRIVER);
+			conn = DriverManager.getConnection(DBURL,DBUSER,DBPASS);
+			Statement state = conn.createStatement();
+			ResultSet res_d = state.executeQuery("select NAME from department;");
+				
+			while(res_d.next()){
+				com1.addItem(res_d.getString("NAME"));	
+			}
+		   
+		    com1.addItemListener(this);
+		    com2.addItemListener(this);
+		    
+		} catch (Exception e2) {
+			e2.printStackTrace();
+		}
+		
+		
+		/*
+		 * 
+		 */
+		this.scpDemo = new JScrollPane();
+        this.scpDemo.setBounds(10, 50, 300, 270);
+        //this.tabDemo.addMouseListener(new Mouse());
+ 	
+		this.setLayout(new BorderLayout());
+		this.setSize(510,380);
+		this.setLocation(1110,335);
+		panel1.setLayout(new GridLayout(0,2,0,0));
+		panel1.add(com1);
+		panel1.add(com2);
+		this.add(panel1,BorderLayout.NORTH);
+		this.add(scpDemo,BorderLayout.CENTER);
+	}
+
+
+	@Override
+	public void itemStateChanged(ItemEvent e) {
+		// TODO Auto-generated method stub
+		if(e.getSource().equals(com1)){   //点击院系选择菜单
+			try {
+				String sql_id_d = "select ID from department where NAME='"+e.getItem()+"';";   //获取所选院系编号
+				Statement state2 = conn.createStatement();		
+				        System.out.println(sql_id_d);//********************************
+				ResultSet res_id_d = state2.executeQuery(sql_id_d);
+				
+				String sql_c = "select * from class where DID=";  //按院系编号查询班级
+				while(res_id_d.next()){
+				     sql_c = sql_c + res_id_d.getString("ID")+";";
+				}
+				        System.out.println(sql_c);//*********************************
+				
+				Statement state3 = conn.createStatement();
+				ResultSet res_n_c = state3.executeQuery(sql_c);
+						
+				com2.removeAllItems();
+			    
+				while(res_n_c.next()){
+					com2.addItem(res_n_c.getString("NAME"));			
+				}
+							
+				}catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+		}
+		
+		if(e.getSource().equals(com2)){  //点击班级选择菜单
+			try {
+				String sql_id_c = "select ID from class where NAME ='"+e.getItem()+"';";  //获取所选班级编号
+				Statement state2 = conn.createStatement();
+				ResultSet res_id_c = state2.executeQuery(sql_id_c);
+				
+				String sql_all_s = "select * from student where CLASS="; //按班级编号查询学生信息
+				while(res_id_c.next()){
+					sql_all_s = sql_all_s + res_id_c.getString("ID")+";";
+				}
+
+				Statement state3 = conn.createStatement();
+				ResultSet res_all_s = state3.executeQuery(sql_all_s);
+				
+                /*
+                 * 
+                 */
+				Statement pstm = conn.createStatement();
+	            String sql1 = "select count(*) from student"; 
+	            //String sql2 = "select * from student";
+	             
+	            ResultSet rs1 = pstm.executeQuery(sql1);
+	            int count = 0;
+	            //得到总记录数
+	            if (rs1.next()) {
+	                count=rs1.getInt(1);
+	            }
+	            //关闭第一个结果集
+	            rs1.close();
+	             
+	            Object[][] info = new Object[count][8];
+	            count = 0;
+	            //查询
+	            ResultSet rs2 = pstm.executeQuery(sql_all_s);
+	            while (rs2.next()) {
+	                info[count][0] = rs2.getString("STUDENTID");
+	                info[count][1] = rs2.getString("NAME");
+	                info[count][2] = rs2.getString("SEX");
+	                info[count][3] = rs2.getString("BIRTHDAY");
+	                info[count][4] = rs2.getString("NATIVE_PLACE");
+	                info[count][5] = rs2.getString("REWARD");
+	                info[count][6] = rs2.getString("PUNISHMENT");
+	                info[count][7] = rs2.getString("SCHANGE");
+	                count++;
+	            }
+	             
+	           /* for(Object []o:info){
+	                System.out.println(o[0]);
+	                System.out.println(o[1]);
+	                System.out.println(o[2]);
+	            }*/
+	             
+	             
+	            String[] title = {"学号","姓名","性别","生日","籍贯","奖励","处罚","学籍变更"};
+	            // 创建JTable
+	            this.tabDemo = new JTable(info, title);
+	            // 显示表头
+	            this.jth = this.tabDemo.getTableHeader();
+	            // 将JTable加入到带滚动条的面板中
+	            this.scpDemo.getViewport().add(tabDemo);
+	             		
+				
+			} catch (SQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		}	
+	}
+	
+	
+	
+	
+      /* class Mouse implements MouseListener{
+		@Override
+		public void mouseClicked(MouseEvent e) {
+			// TODO Auto-generated method stub
+			Point p = e.getPoint();
+			row = tabDemo.rowAtPoint(p); 
+		    column = tabDemo.columnAtPoint(p); 	
+			
+			row = tabDemo.getSelectedRow();
+		}
+		@Override
+		public void mousePressed(MouseEvent e) {
+			// TODO Auto-generated method stub		
+		}
+		@Override
+		public void mouseReleased(MouseEvent e) {
+			// TODO Auto-generated method stub			
+		}
+		@Override
+		public void mouseEntered(MouseEvent e) {
+			// TODO Auto-generated method stub		
+		}
+	    @Override
+		public void mouseExited(MouseEvent e) {
+			// TODO Auto-generated method stub	
+		}
+    }*/
+    
+
+
+	
+}
